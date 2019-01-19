@@ -105,6 +105,9 @@ Screen_Welcome::~Screen_Welcome()
 
 	SDL_DestroyTexture(exitGameTexture);
 	//SDL_FreeSurface(exitGameSurface);
+
+	//delete font;
+	//delete fontPath;
 }
 
 
