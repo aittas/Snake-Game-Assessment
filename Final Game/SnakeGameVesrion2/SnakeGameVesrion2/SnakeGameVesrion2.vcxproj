@@ -70,8 +70,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>C:\Users\Tass  Adams\Desktop\GameEngineProgramming\SDL2_2015\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\Tass  Adams\Desktop\GameEngineProgramming\SDL2_2015\lib\x86;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Users\Tass  Adams\Desktop\SDL2_2015\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\Tass  Adams\Desktop\SDL2_2015\lib\x86;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

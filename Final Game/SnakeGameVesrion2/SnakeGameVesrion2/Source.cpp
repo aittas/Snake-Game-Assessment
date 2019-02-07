@@ -11,8 +11,9 @@
 
 using namespace std;
 
+
 int main(int argc, char* argv[])
-{//SDL_SetRenderDrawColor(rendererBACK, 51, 51, 0, 255);
+{
 
 	/* - INITIALIZE STUFF - */
 
@@ -55,6 +56,7 @@ int main(int argc, char* argv[])
 		cout << "\n FAILED TO GET DESKTOP DISPLAY MODE";
 		SDL_Success = false;
 	}
+	cout <<  "\n dm.w: "<< dm.w <<" dm.h: " <<dm.h;
 
 	SDL_Window* windowBACK = SDL_CreateWindow("SnakeBack", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, dm.w, dm.h, SDL_WINDOW_SHOWN);
 	if (windowBACK == NULL)
@@ -78,11 +80,13 @@ int main(int argc, char* argv[])
 
 	//our game's window and renderer (according to desktop's height)
 	int blockScale = 30; //the size or our blocks (food, snake head, snake tails blocks, etc..) 
+	
 	int windowScale = static_cast<int>(dm.h / blockScale); //the window scale ,.. is to be used during the game loop with the blockScale for different calculation
 	cout << "\n window scale (static_cast<int>(dm.h / blockScale)) :   " << windowScale; //some output to check 
+	
 	int windowSize = windowScale * blockScale; //we mutiply 'windowScale' with the 'blockScale' to get the size of our window (width will be equal to height)
 	
-	SDL_Window* window = SDL_CreateWindow("Snake", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, windowSize, windowSize, SDL_WINDOW_HIDDEN); //dont want to show it yet
+	SDL_Window* window = SDL_CreateWindow("Snake", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, windowSize, windowSize, SDL_WINDOW_BORDERLESS | SDL_WINDOW_HIDDEN); //dont want to show it yet
 	if (window == NULL)
 	{
 		cout << "\n FAILED TO CREATE WINDOW ! ";
@@ -117,7 +121,9 @@ int main(int argc, char* argv[])
 
 
 
+
 	/* - GAME - */
+
 
 	// load all game-sound relevant
 	SoundManager::soundManager.loadSound("buttonPressed", "assets/effect.wav"); //when user choose an option
@@ -126,24 +132,12 @@ int main(int argc, char* argv[])
 
 
 
-	// "welcoming" screen
-	Mix_Music* welcoming = Mix_LoadMUS("assets/music.ogg"); //load up music & play
-	if (welcoming == NULL)
-	{
-		cout << "\n ***************************";
-		cout << "\n *** ERROR LOADING MUSIC (welcome screen)***";
-		cout << "\n ***************************";
-	}
-	Mix_PlayMusic(welcoming, -1); //play music
-
+	//welcome screen
 	GameWelcome* welcome = new GameWelcome();
-	int gameLevel = welcome->ShowScreen(rendererBACK, dm.w); // returns the game level according to user's selection (3->Easy, 2->Normal, 1-> Hard)
-	cout << "\n\n Game Level Value: " << gameLevel <<"\n";
+	int gameLevel = welcome->ShowScreen(rendererBACK, w); // returns the game level according to user's selection (3->Easy, 2->Normal, 1-> Hard)
+	cout << "\n Game Level Value: " << gameLevel <<"\n";
 
-	Mix_PausedMusic();//stop music from playing
-	Mix_FreeMusic(welcoming);//delete song from memory
-
-
+	
 
 	// run game
 	SDL_ShowWindow(window); //now, show our game's window (dont remove the background)
@@ -165,7 +159,6 @@ int main(int argc, char* argv[])
 
 
 	//free memory
-	//SoundManager::soundManager.~SoundManager();
 
 	welcome->~GameWelcome();
 	delete welcome;

@@ -1,6 +1,10 @@
 #include "GameLogic.h"
 #include "SoundManager.h"
 
+#include <algorithm>    // std::shuffle
+#include <random>       // std::default_random_engine
+#include <chrono>       // std::chrono::system_clock
+
 
 
 pair<int, int> GameLogic::GetRandom_snakeFood_XY(int snakeHead_X, int snakeHead_Y, vector<int> snakeTail_X, vector<int> snakeTail_Y, int snakeTail_Length, int blockScale, int windowScale)
@@ -11,40 +15,66 @@ pair<int, int> GameLogic::GetRandom_snakeFood_XY(int snakeHead_X, int snakeHead_
 	Location should Not be the same with any of the blocks of snake's tail
 	*/
 
-	int x = 0; //random  x  position on screen to put food's block 
-	int y = 0; //random  y  position on screen to put food's block 
+	Uint32 before = SDL_GetTicks();
 
 
-	bool valid = false;
-	while (!valid)
+
+	int winSize = blockScale * windowScale;
+	vector< pair<int, int> > mapXY;
+	vector< pair<int, int> > snakeXY; 
+	vector< pair<int, int> > freeXY;
+
+
+	//snake blocks
+	for (int i = 0; i < snakeTail_Length; i++)
+		snakeXY.push_back(make_pair(snakeTail_X[i], snakeTail_Y[i]));
+
+	snakeXY.push_back(make_pair(snakeHead_X, snakeHead_Y));
+
+
+	//map blocks
+	for (int y = 0; y < winSize - blockScale; y = y + blockScale)
+		for (int x = 0; x < winSize - blockScale; x = x + blockScale)
+			mapXY.push_back(make_pair(x, y));
+
+
+	//free blocks
+	int counter;
+	for (int i = 0; i < mapXY.size(); i++)
 	{
-		/*
-		*	Random Location: 
-		*	Remember width & height of our window('windowSize') equal to  'blockScale' times 'windowScale'. (**Declared in Source.cpp)
-		*	So, using 'blockScale' and 'windowScale' we can generate a location inside the window!  )
-		*/
-		srand(time(0));
-		x = blockScale * (rand() % windowScale);
-		y = blockScale * (rand() % windowScale);
-
-		//make valid true
-		valid = true;
-
-		//check for any possible collision between the random generated positions(x,y) and snake's blocks(head & tail)
-		for (int i = 0; i < snakeTail_Length; i++)
+		counter = 0;
+		
+		for (int j = 0; j < snakeXY.size(); j++)
 		{
-			if ((x == snakeTail_X[i] && y == snakeTail_Y[i]) || (x == snakeHead_X && y == snakeHead_Y))
-			{
-				valid = false;//if so, food location is not valid
-			}
+			if (mapXY[i] == snakeXY[j])
+				break;
+			else
+				counter++;
 		}
+
+		if (counter == snakeXY.size())
+			freeXY.push_back(mapXY[i]);
 	}
 
 
-	//Create and return a pair of the two position values
-	pair <int, int> FoodLocation = make_pair(x, y);
+	// obtain a time-based seed:
+	unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+	default_random_engine e(seed);
+	
+	//shuffle 
+	shuffle(freeXY.begin(), freeXY.end(), e);
 
-	return FoodLocation;
+
+
+	Uint32 after = SDL_GetTicks();
+
+	Uint32 ms = after - before;
+	if (ms>70)
+		cout << "\n* Time to find fruit spot: " << ms << "ms *";
+
+	
+	//return a pair from vector
+	return freeXY[0];
 }
 
 
@@ -142,7 +172,7 @@ void GameLogic::RunGame(SDL_Renderer* renderer, int blockScale, int windowScale,
 
 				Mix_PausedMusic();//stop music from playing
 				Mix_FreeMusic(music);//delete song from memory
-
+				music = NULL;
 				GameLoop = false;
 			}
 
@@ -226,7 +256,7 @@ void GameLogic::RunGame(SDL_Renderer* renderer, int blockScale, int windowScale,
 		//COLLISSION DETECTION (when snake has eaten the food)
 		if (IsCollision(snakeHead_X, snakeHead_Y, snakeFood_X, snakeFood_Y))
 		{
-			cout << "\n Snake ate its food";
+			//cout << "\n Snake ate its food";
 
 			//play some sound
 			SoundManager::soundManager.playSound("food");
@@ -287,11 +317,12 @@ void GameLogic::RunGame(SDL_Renderer* renderer, int blockScale, int windowScale,
 
 				Mix_PausedMusic();//stop music from playing
 				Mix_FreeMusic(music);//delete song from memory
+				music = NULL;
 
-				SoundManager::soundManager.playSound("gameover");//play some sound
 
 
 				//***GAME OVER RENDERING********
+				SoundManager::soundManager.playSound("gameover");//play some sound
 				gameOverValue = gr->DisplayGameOverScreen(renderer, event, snakeTail_Length, windowSize); 
 				if (gameOverValue == -1)
 					GameLoop = false;
@@ -305,7 +336,7 @@ void GameLogic::RunGame(SDL_Renderer* renderer, int blockScale, int windowScale,
 					cout << "\n *** ERROR LOADING MUSIC (in game loop)***";
 					cout << "\n ***************************";
 				}
-				Mix_PlayMusic(music, 1);
+				Mix_PlayMusic(music, -1);
 
 				snakeHead_X = 0;
 				snakeHead_Y = 0;
@@ -335,11 +366,12 @@ void GameLogic::RunGame(SDL_Renderer* renderer, int blockScale, int windowScale,
 
 			Mix_PausedMusic();//stop music from playing
 			Mix_FreeMusic(music);//delete song from memory
-
-			SoundManager::soundManager.playSound("gameover");//play some sound
+			music = NULL;
+			
 
 
 			//***GAME OVER RENDERING********
+			SoundManager::soundManager.playSound("gameover");//play some sound
 			gameOverValue = gr->DisplayGameOverScreen(renderer,event,snakeTail_Length,windowSize); 
 			if (gameOverValue == -1)
 				GameLoop = false;
@@ -353,7 +385,7 @@ void GameLogic::RunGame(SDL_Renderer* renderer, int blockScale, int windowScale,
 				cout << "\n *** ERROR LOADING MUSIC (in game loop)***";
 				cout << "\n ***************************";
 			}
-			Mix_PlayMusic(music, 1);
+			Mix_PlayMusic(music, -1);
 
 			snakeHead_X = 0;
 			snakeHead_Y = 0;

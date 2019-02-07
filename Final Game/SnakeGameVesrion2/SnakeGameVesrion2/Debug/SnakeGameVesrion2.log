@@ -1,3 +1,11 @@
-﻿  GameWelcome.cpp
-c:\users\tass  adams\desktop\snakegamevesrion2\snakegamevesrion2\gamewelcome.cpp(66): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
-  SnakeGameVesrion2.vcxproj -> C:\Users\Tass  Adams\Desktop\SnakeGameVesrion2\Debug\SnakeGameVesrion2.exe
+﻿  GameLogic.cpp
+c:\users\tass  adams\desktop\snakegameassessment\final game\snakegamevesrion2\snakegamevesrion2\gamelogic.cpp(43): warning C4018: '<': signed/unsigned mismatch
+c:\users\tass  adams\desktop\snakegameassessment\final game\snakegamevesrion2\snakegamevesrion2\gamelogic.cpp(47): warning C4018: '<': signed/unsigned mismatch
+c:\users\tass  adams\desktop\snakegameassessment\final game\snakegamevesrion2\snakegamevesrion2\gamelogic.cpp(61): warning C4244: 'initializing': conversion from 'std::chrono::system_clock::rep' to 'unsigned int', possible loss of data
+c:\users\tass  adams\desktop\snakegameassessment\final game\snakegamevesrion2\snakegamevesrion2\gamelogic.cpp(153): warning C4244: 'initializing': conversion from 'Uint32' to 'float', possible loss of data
+c:\users\tass  adams\desktop\snakegameassessment\final game\snakegamevesrion2\snakegamevesrion2\gamelogic.cpp(159): warning C4244: 'initializing': conversion from 'Uint32' to 'float', possible loss of data
+c:\users\tass  adams\desktop\snakegameassessment\final game\snakegamevesrion2\snakegamevesrion2\gamelogic.cpp(235): warning C4244: '-=': conversion from 'float' to 'int', possible loss of data
+c:\users\tass  adams\desktop\snakegameassessment\final game\snakegamevesrion2\snakegamevesrion2\gamelogic.cpp(240): warning C4244: '-=': conversion from 'float' to 'int', possible loss of data
+c:\users\tass  adams\desktop\snakegameassessment\final game\snakegamevesrion2\snakegamevesrion2\gamelogic.cpp(245): warning C4244: '+=': conversion from 'float' to 'int', possible loss of data
+c:\users\tass  adams\desktop\snakegameassessment\final game\snakegamevesrion2\snakegamevesrion2\gamelogic.cpp(250): warning C4244: '+=': conversion from 'float' to 'int', possible loss of data
+  SnakeGameVesrion2.vcxproj -> C:\Users\Tass  Adams\Desktop\SnakeGameAssessment\Final Game\SnakeGameVesrion2\Debug\SnakeGameVesrion2.exe

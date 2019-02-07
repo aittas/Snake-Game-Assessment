@@ -72,6 +72,9 @@ int GameRenders::DrawScore(SDL_Renderer* renderer, int snakeTail_Length, int win
 
 	//destroy score
 	SDL_DestroyTexture(score);
+
+
+	return 1;
 }
 
 

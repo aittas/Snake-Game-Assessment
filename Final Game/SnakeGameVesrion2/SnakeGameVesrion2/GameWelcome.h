@@ -53,6 +53,9 @@ private:
 	//our event for key pressing
 	SDL_Event event;
 
+	//some background music
+	Mix_Music* welcoming;
+
 public:
 	GameWelcome();
 	~GameWelcome();

@@ -39,7 +39,7 @@ int GameWelcome::PopUpHighScore(int windowSize)
 	if (InputFile.is_open())
 	{
 		InputFile >> scoreFromFile;
-		cout << " Hihest score is: " << scoreFromFile;
+		cout << "\n Hihest score is: " << scoreFromFile;
 		InputFile.close();
 	}
 
@@ -135,12 +135,29 @@ GameWelcome::~GameWelcome()
 	SDL_DestroyTexture(levelHardTexture);
 	SDL_DestroyTexture(highScoreTexture);
 	SDL_DestroyTexture(exitGameTexture);
+
+
+	Mix_PausedMusic();//stop music from playing
+	Mix_FreeMusic(welcoming);//delete song from memory
+	welcoming = NULL;
 }
 
 
 
 int GameWelcome::ShowScreen(SDL_Renderer * renderer, int windowSize)
 {
+	//backgorund music
+	welcoming = Mix_LoadMUS("assets/music.ogg"); //load up music & play
+	if (welcoming == NULL)
+	{
+		cout << "\n ***************************";
+		cout << "\n *** ERROR LOADING MUSIC (welcome screen)***";
+		cout << "\n ***************************";
+	}
+	Mix_PlayMusic(welcoming, -1); //play music
+
+
+
 	//Get the font
 	TTF_Font* myFont = TTF_OpenFont((char*)"assets/trashco.ttf", 100);
 	if (myFont == NULL)
@@ -248,6 +265,7 @@ int GameWelcome::ShowScreen(SDL_Renderer * renderer, int windowSize)
 			if (event.type == SDL_QUIT || event.key.keysym.scancode == SDL_SCANCODE_ESCAPE)
 			{
 				SoundManager::soundManager.playSound("buttonPressed");//play some sound
+				
 				return -1;
 			}
 			//Options...
@@ -257,6 +275,7 @@ int GameWelcome::ShowScreen(SDL_Renderer * renderer, int windowSize)
 				if (event.key.keysym.scancode == SDL_SCANCODE_E)
 				{
 					SoundManager::soundManager.playSound("buttonPressed");//play some sound
+										
 					return levelEasy;
 				}
 
@@ -264,6 +283,7 @@ int GameWelcome::ShowScreen(SDL_Renderer * renderer, int windowSize)
 				else if (event.key.keysym.scancode == SDL_SCANCODE_N) 
 				{
 					SoundManager::soundManager.playSound("buttonPressed");//play some sound
+								
 					return levelNormal;
 				}	
 
@@ -271,6 +291,7 @@ int GameWelcome::ShowScreen(SDL_Renderer * renderer, int windowSize)
 				else if (event.key.keysym.scancode == SDL_SCANCODE_H)
 				{
 					SoundManager::soundManager.playSound("buttonPressed");//play some sound
+					
 					return levelHard;
 				}
 
@@ -278,10 +299,9 @@ int GameWelcome::ShowScreen(SDL_Renderer * renderer, int windowSize)
 				else if (event.key.keysym.scancode == SDL_SCANCODE_S)
 				{
 					SoundManager::soundManager.playSound("buttonPressed");//play some sound
+					
 					if (PopUpHighScore(windowSize) == -1)
-					{
 						return -1;
-					}
 				}
 					
 			}
